@@ -1,0 +1,11 @@
+[
+    {
+        "ativo": [],
+        "id": "1",
+        "nome": "PC-FINANCEIRO-01",
+        "responsavel": "ADRIEL",
+        "ip": "192.168.100.10",
+        "tipo": "notebook",
+        "vulnerabilidades": []
+    }
+]
