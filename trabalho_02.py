@@ -15,7 +15,7 @@ class Severidade(Enum):
     BAIXA = "baixa"
     MEDIA = "media"
     ALTA = "alta"
-    CRITIACA = "critica"
+    CRITICA = "critica"
 
 class Status (Enum):
     ABERTA = "aberta"
@@ -26,15 +26,8 @@ class Status (Enum):
 class Categorias_Vuln(Enum):
     REDE = "rede"
     SOFTWARE = "software"
-    HARDWARE = "harddware"
+    HARDWARE = "hardware"
     CONFIGURACAO = "configuracao"
-
-
-
-TIPOS_ATIVOS = ["notebook" , "roteador", "servidor Web", "impressora"]
-SEVERIDADE =["baixa", "media", "alta", "critica"]
-STATUS = ["aberta", "em tratamento", "corrigida", "risco aceito"]
-CATEGORIAS_VULN = ["rede","software","hardware", "CONFIGURACAO  "] 
 
 
 def salvar_ativo(ativos):
@@ -44,7 +37,7 @@ def salvar_ativo(ativos):
 def carregar_ativos():
     if not ARQUIVOS_DADOS.exists():
         salvar_ativo([])
-        return
+        return[]
     with open (ARQUIVOS_DADOS, "r", encoding= "utf-8") as arquivo:
         return json.load(arquivo)
     
@@ -82,7 +75,7 @@ def cadastrar_ativo(ativos):
     if not nome or not responsavel or not ip_ativo:
             print("=== OS CAMPOS ACIMA NÃO DEVEM FICAR EM BRANCO ===")
             return
-    if tipo not in TipoAtivo:
+    if tipo not in [tipo.name for tipo in TipoAtivo]:
             print("=== TIPO INVÁLIDO === ")
             return
 
@@ -153,15 +146,15 @@ def editar_remover_ativo(ativos):
                 ativo ["nome"] = novo_valor
         
         elif opcao == "2":
-            if novo_valor == ativo["responsavel"]:
+            if novo_valor.lower() == ativo["responsavel"].lower():
                 print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
             else:
                 ativo ["responsavel"] = novo_valor
         elif opcao == "3":
-            if novo_valor == ativo["ip"]:
+            if novo_valor.strip() == ativo["ip"].strip():
                 print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
             else:
-                ativo["id"] = novo_valor
+                ativo["ip"] = novo_valor
         elif opcao == "4":
            if novo_valor not in [tipo.name for tipo in TipoAtivo]:
                 print("=== TIPO INVÁLIDO ===")
@@ -191,7 +184,7 @@ def cadastrar_vuln(ativos):
 
     descricao = input("Descrição: ").strip()
     categoria = input("Categoria: ").strip()
-    if categoria not in CATEGORIAS_VULN:
+    if categoria not in [tipo.value for tipo in Categorias_Vuln]:
         print("=== CATEGORIA ERRADA ===")
         return
     severidade = input("Severidade (baixa, média, alta, crítica): ").strip().lower()
@@ -200,7 +193,7 @@ def cadastrar_vuln(ativos):
     if not descricao or not categoria:
         print("Descrição e categoria não podem ficar vazias.")
         return
-    if severidade not in SEVERIDADE or status not in STATUS:
+    if severidade not in [tipo.value for tipo in Severidade] or status not in [tipo.value for tipo in Status]:
         print("Severidade ou status inválido.")
         return
     
@@ -233,7 +226,7 @@ def visualizar_vuln(ativos):
     print("=== ESSES SAO OS IDS CADASTRADOS ===")
     id_ativo_mostrar(ativos)
     ativo = buscar_ativo(ativos, input("=== DIGITE O ID DO ATIVO:  ").strip())
-    if buscar_ativo is None:
+    if ativo is None:
         print("=== ATIVO NAO ENCONTRADO ===")
         return
     if not ativo["vulnerabilidades"]:
@@ -249,10 +242,8 @@ def editar_remover_vuln(ativos):
     print("=== ESSES SAO OS IDS CADASTRADO===")
     id_ativo_mostrar(ativos)
     ativo = buscar_ativo( ativos, input("=== DIGITE O ID DO ATIVO: ").strip())
-    if buscar_ativo is None:
-        print("ATIVO NAO ENCONTRADO")
-        return
     if ativo is None:
+        print("ATIVO NAO ENCONTRADO")
         return
     vulnerabilidades = ativo["vulnerabilidades"]
     if not vulnerabilidades:
@@ -261,8 +252,9 @@ def editar_remover_vuln(ativos):
     numero = 1
     for vuln in vulnerabilidades:
         print(numero, "-", vuln["descricao"])
-        numero += 1
-        numero = int(input("Número da vulnerabilidade: ").strip())
+        numero += 1 
+
+    numero = int(input("Número da vulnerabilidade: ").strip())
     if numero < 1 or numero > len(vulnerabilidades):
         print("Número inválido.")
         return
@@ -278,14 +270,14 @@ def editar_remover_vuln(ativos):
             print("=== O VALOR NAO PODE FICAR EM BRANCO ===")
             return
         if opcao == "1":
-            if novo_valor == vuln["descricao"]:
+            if novo_valor.lower == vuln["descricao"].lower:
                 print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
                 return
             else:
                 vuln ["descricao"] = novo_valor
 
         elif opcao == "2":
-            if novo_valor .lower() not in CATEGORIAS_VULN:
+            if novo_valor .lower() not in [tipo.value for tipo in Categorias_Vuln]:
                 print("=== CATEGORIA INVÁLIDA ===")
                 return
             if novo_valor ==  vuln["categoria"]:
@@ -295,14 +287,14 @@ def editar_remover_vuln(ativos):
 
         elif opcao == "3":
             
-            if novo_valor .lower() not in SEVERIDADE:
+            if novo_valor .lower() not in [tipo.value for tipo in Severidade]:
                 print("=== SEVERIDADE INVALIDA ===")
                 return
             vuln["severidade"] = novo_valor
 
         elif opcao == "4":
             
-            if novo_valor .lower() not in STATUS:
+            if novo_valor .lower() not in [tipo.value for tipo in Status ]:
                 print("=== STATUS INVALIDO ===")
                 return
             vuln ["status"] = novo_valor
@@ -312,12 +304,14 @@ def editar_remover_vuln(ativos):
     elif opcao == "5":
         if input("=== CONFIRMA A REMOCAO? (s/n): ").strip().lower() == "s":
             vulnerabilidades.remove(vuln)
-            print("=== VULNERABILIDADE REMOVIDA ===")
+            salvar_ativo(ativos)
+           
+            print("=== VULNERABILIDADE REMOVIDA ===")   
         else:
             print("=== REMOCAO CANCELADA ===")
     else: 
         print("=== OPCAO INVALIDA ===")
-            
+  
 
 #opcoes mostradas do que o usuario tera    
 def Interface_menu (ativos):
