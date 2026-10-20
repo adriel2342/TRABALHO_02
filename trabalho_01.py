@@ -1,7 +1,35 @@
 import json
 from pathlib import Path
+from enum import Enum
 
 ARQUIVOS_DADOS = Path(__file__).resolve().parent /"ativos.json"
+
+
+class TipoAtivo(Enum):
+    NOTEBOOK = 1
+    ROTEADOR = 2
+    SERVIDOR_WEB = 3
+    IMPRESSORA = 4
+
+class Severidade(Enum):
+    BAIXA = "baixa"
+    MEDIA = "media"
+    ALTA = "alta"
+    CRITIACA = "critica"
+
+class Status (Enum):
+    ABERTA = "aberta"
+    EM_TRATAMENTO = "em tratamento"
+    CORRIGIDA = "corrigida"
+    RISCO_ACEITO = "risco aceito"
+
+class Categorias_Vuln(Enum):
+    REDE = "rede"
+    SOFTWARE = "software"
+    HARDWARE = "harddware"
+    CONFIGURACAO = "configuracao"
+
+
 
 TIPOS_ATIVOS = ["notebook" , "roteador", "servidor Web", "impressora"]
 SEVERIDADE =["baixa", "media", "alta", "critica"]
