@@ -77,12 +77,12 @@ def cadastrar_ativo(ativos):
     responsavel = input ("CADASTRE O RESPONSAVEL PELO ATIVO: ")
     ip_ativo = input("CADASTRE O IP DO ATIVO: ")
 
-    print("tipos disponiveis:", ", ".join(TIPOS_ATIVOS))
+    print("tipos disponiveis:", ", ".join(tipo.name for tipo in TipoAtivo))
     tipo = input("TIPO DO ATIVO: ").strip()
     if not nome or not responsavel or not ip_ativo:
             print("=== OS CAMPOS ACIMA NÃO DEVEM FICAR EM BRANCO ===")
             return
-    if tipo not in TIPOS_ATIVOS:
+    if tipo not in TipoAtivo:
             print("=== TIPO INVÁLIDO === ")
             return
 
@@ -163,7 +163,7 @@ def editar_remover_ativo(ativos):
             else:
                 ativo["id"] = novo_valor
         elif opcao == "4":
-           if novo_valor not in TIPOS_ATIVOS:
+           if novo_valor not in [tipo.name for tipo in TipoAtivo]:
                 print("=== TIPO INVÁLIDO ===")
                 return
            ativo["tipo"] = novo_valor
