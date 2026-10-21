@@ -70,8 +70,22 @@ def cadastrar_ativo(ativos):
     responsavel = input ("CADASTRE O RESPONSAVEL PELO ATIVO: ")
     ip_ativo = input("CADASTRE O IP DO ATIVO: ")
 
-    print("tipos disponiveis:", ", ".join(tipo.name for tipo in TipoAtivo))
-    tipo = input("TIPO DO ATIVO: ").strip()
+    print("=== TIPO DE ATIVOS DISPONÍVEIS ===")
+    for tipo in TipoAtivo:
+       print(tipo.value, "-", tipo.name)
+    
+    try:
+        codigo_tipo = int(input("=== DIGITE O CÓDIGO DO TIPO: ").strip())
+
+    except ValueError:
+
+        print("=== O NÚMERO CADASTRADO É INVALIDO ===")
+        return
+    
+    if codigo_tipo not in[tipo.value for tipo in TipoAtivo]:
+        print("CÓDIGO INVALIDO")
+        return
+
     if not nome or not responsavel or not ip_ativo:
             print("=== OS CAMPOS ACIMA NÃO DEVEM FICAR EM BRANCO ===")
             return
@@ -84,7 +98,7 @@ def cadastrar_ativo(ativos):
     print(f"ESSE É O {nome}?")
     print(f"ESSE É O {responsavel}?")
     print(f"ESSE É O {ip_ativo}")
-    print(f"ESSE É O {tipo}?")
+    print(f"ESSE É O {codigo_tipo} - {TipoAtivo(codigo_tipo).name}?")
 
     confirmacao = input("PREENCHA COM sim OU nao:").strip().lower()
 
@@ -96,7 +110,7 @@ def cadastrar_ativo(ativos):
             "nome": nome,
             "responsavel" : responsavel,
             "ip" : ip_ativo,
-            "tipo" : tipo,
+            "tipo" : codigo_tipo,
             "vulnerabilidades": []
 
         }
@@ -119,6 +133,7 @@ def visualizar_ativo(ativos):
     if not ativos:
         print("=== NAO HA ATIVOS CADASTRADOS ===")
     for ativo in ativos:
+        nome_tipo = TipoAtivo(ativo["tipo"].name)
         print("\nID:", ativo["id"], "| Nome:", ativo["nome"], "| Tipo:", ativo["tipo"])
         print("Responsável:", ativo["responsavel"], "| ip:", ativo["ip"])
         
@@ -156,10 +171,19 @@ def editar_remover_ativo(ativos):
             else:
                 ativo["ip"] = novo_valor
         elif opcao == "4":
-           if novo_valor not in [tipo.name for tipo in TipoAtivo]:
+            for tipo in TipoAtivo:
+               print(tipo.value, "-", tipo.name)
+            try:
+               novo_valor = int(input("=== DIGITE O CÓDIGO DO NOVO TIPO: ").strip())
+            
+            except ValueError:
+               print("=== DIGITE UM NÚMERO VÁLIDO ===")
+               return
+            
+            if novo_valor not in [tipo.name for tipo in TipoAtivo]:
                 print("=== TIPO INVÁLIDO ===")
                 return
-           ativo["tipo"] = novo_valor
+            ativo["tipo"] = novo_valor
         
         salvar_ativo(ativos)
         print("=== ATIVO ATUALIZADO ===")
