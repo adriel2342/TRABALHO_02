@@ -89,7 +89,7 @@ def cadastrar_ativo(ativos):
     if not nome or not responsavel or not ip_ativo:
             print("=== OS CAMPOS ACIMA NÃO DEVEM FICAR EM BRANCO ===")
             return
-    if tipo not in [tipo.name for tipo in TipoAtivo]:
+    if codigo_tipo not in [tipo.value for tipo in TipoAtivo]:
             print("=== TIPO INVÁLIDO === ")
             return
 
@@ -133,8 +133,8 @@ def visualizar_ativo(ativos):
     if not ativos:
         print("=== NAO HA ATIVOS CADASTRADOS ===")
     for ativo in ativos:
-        nome_tipo = TipoAtivo(ativo["tipo"].name)
-        print("\nID:", ativo["id"], "| Nome:", ativo["nome"], "| Tipo:", ativo["tipo"])
+        nome_tipo = TipoAtivo(  ativo["tipo"]).name2
+        print("\nID:", ativo["id"], "| Nome:", ativo["nome"], "| Tipo:", nome_tipo)
         print("Responsável:", ativo["responsavel"], "| ip:", ativo["ip"])
         
 
