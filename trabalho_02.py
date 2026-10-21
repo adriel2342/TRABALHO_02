@@ -14,7 +14,7 @@ class TipoAtivo(Enum):
 class Severidade(Enum):
     BAIXA = "baixa"
     MEDIA = "media"
-    ALTA = "alta"
+    ALTA = "alta"   
     CRITICA = "critica"
 
 class Status (Enum):
