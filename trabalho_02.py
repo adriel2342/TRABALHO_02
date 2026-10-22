@@ -295,7 +295,7 @@ def editar_remover_vuln(ativos):
     print("3 - Alterar severidade | 4 - Alterar status | 5 - Remover")
     opcao = input("Escolha: ").strip()
 
-    if opcao in ["1", "2", "3", "4"]: 
+    if opcao in ["1", "3", "4"]: 
         novo_valor = input("=== NOVO VALOR: ").strip()
         if not novo_valor:
             print("=== O VALOR NAO PODE FICAR EM BRANCO ===")
@@ -306,15 +306,6 @@ def editar_remover_vuln(ativos):
                 return
             else:
                 vuln ["descricao"] = novo_valor
-
-        elif opcao == "2":
-            if novo_valor .lower() not in [tipo.value for tipo in Categorias_Vuln]:
-                print("=== CATEGORIA INVÁLIDA ===")
-                return
-            if novo_valor ==  vuln["categoria"]:
-                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
-            else:
-                vuln ["categoria"] = novo_valor
 
         elif opcao == "3":
             
@@ -332,7 +323,23 @@ def editar_remover_vuln(ativos):
         salvar_ativo(ativos)
         print ("=== VULNERABILIDADE MODIFICADA ===")
 
+    elif opcao == "2":
+        print("=== TIPOS DSIPONÍVEIS ===")
+        for categoria in Categorias_Vuln:
+            print(categoria.value)
+        novo_valor = input("NOVO VALOR: ")
+        
+        if novo_valor .lower() not in [tipo.value for tipo in Categorias_Vuln]:
+            print("=== CATEGORIA INVÁLIDA ===")
+            return
+        if novo_valor  ==  vuln["categoria"]:
+            print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+        else:
+            vuln ["categoria"] = novo_valor
+        print("=== TIPO MODIFICADO ===")
+        salvar_ativo(ativos)
     elif opcao == "5":
+
         if input("=== CONFIRMA A REMOCAO? (s/n): ").strip().lower() == "s":
             vulnerabilidades.remove(vuln)
             salvar_ativo(ativos)
