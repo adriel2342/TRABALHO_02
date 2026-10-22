@@ -2,10 +2,23 @@
     {
         "ativo": [],
         "id": "1",
-        "nome": "PC-FINANCEIRO-01",
+        "nome": "PC-FINACEIRO-01",
         "responsavel": "ADRIEL",
-        "ip": "192.100.168.10",
+        "ip": "192.168.100.10",
         "tipo": 1,
-        "vulnerabilidades": []
+        "vulnerabilidades": [
+            {
+                "descricao": "Software desuatualizado",
+                "categoria": "software",
+                "severidade": "baixa",
+                "status": "aberta"
+            },
+            {
+                "descricao": "Teclado com teclas não funcionais",
+                "categoria": "hardware",
+                "severidade": "baixa",
+                "status": "aberta"
+            }
+        ]
     }
 ]

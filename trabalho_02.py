@@ -133,7 +133,7 @@ def visualizar_ativo(ativos):
     if not ativos:
         print("=== NAO HA ATIVOS CADASTRADOS ===")
     for ativo in ativos:
-        nome_tipo = TipoAtivo(  ativo["tipo"]).name2
+        nome_tipo = TipoAtivo(  ativo["tipo"]).name
         print("\nID:", ativo["id"], "| Nome:", ativo["nome"], "| Tipo:", nome_tipo)
         print("Responsável:", ativo["responsavel"], "| ip:", ativo["ip"])
         
@@ -149,7 +149,7 @@ def editar_remover_ativo(ativos):
     print("1 - Alterar nome | 2 - Alterar responsável | 3 - Alterar ip")
     print("4 - Alterar tipo | 5 - Remover ativo")
     opcao = input("SELECIONE UM DOS NUMEROS ACIMA: ")
-    if opcao in ["1", "2", "3","4"]:
+    if opcao in ["1", "2", "3"]:
         novo_valor = input("NOVO VALOR: ").strip()
         if not novo_valor:
             print("=== ESSE CAMPO NAO PODE FICAR EM BRANCO ===")
@@ -170,20 +170,24 @@ def editar_remover_ativo(ativos):
                 print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
             else:
                 ativo["ip"] = novo_valor
-        elif opcao == "4":
-            for tipo in TipoAtivo:
-               print(tipo.value, "-", tipo.name)
-            try:
-               novo_valor = int(input("=== DIGITE O CÓDIGO DO NOVO TIPO: ").strip())
+    elif opcao == "4":
+        for tipo in TipoAtivo:
+            print(tipo.value, "-", tipo.name)
+        try:
+            novo_valor = int(input("=== DIGITE O CÓDIGO DO NOVO TIPO: ").strip())
             
-            except ValueError:
-               print("=== DIGITE UM NÚMERO VÁLIDO ===")
-               return
+        except ValueError:
+            print("=== DIGITE UM NÚMERO VÁLIDO ===")
+            return
             
-            if novo_valor not in [tipo.name for tipo in TipoAtivo]:
-                print("=== TIPO INVÁLIDO ===")
-                return
-            ativo["tipo"] = novo_valor
+        if novo_valor not in [tipo.value for tipo in TipoAtivo]:
+            print("=== TIPO INVÁLIDO ===")
+            return
+        ativo["tipo"] = novo_valor
+
+        if novo_valor == ativo["tipo"]: 
+            print("=== TIPO PREVIAMENTE CADASTRADO ===")
+            return
         
         salvar_ativo(ativos)
         print("=== ATIVO ATUALIZADO ===")
@@ -207,7 +211,10 @@ def cadastrar_vuln(ativos):
         return
 
     descricao = input("Descrição: ").strip()
-    categoria = input("Categoria: ").strip()
+    print("=== CATEGORIAS DISPONÍVEIS ===")
+    for categoria in Categorias_Vuln:
+        print(categoria.value)
+    categoria = input("Categoria: ").strip() 
     if categoria not in [tipo.value for tipo in Categorias_Vuln]:
         print("=== CATEGORIA ERRADA ===")
         return
